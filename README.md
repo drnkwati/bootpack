@@ -13,7 +13,7 @@ Bootpack is a laravel 5 package bootstraper that does the following:
 -   Dumps the autoload
 -   Adds the package service provider to the laravel project
 -   Initiates a git repository
--   Perhaps more ;D
+-   Perhaps more...;
 
 It features a full terminal application based on an artisan command.
 
