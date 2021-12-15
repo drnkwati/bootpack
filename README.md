@@ -46,4 +46,3 @@ php artisan bootpack:create test/package
 ```
 
 You then have a cool functional terminal to help you create the package. Enjoy!
-# bootpack
