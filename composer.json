@@ -1,0 +1,37 @@
+{
+    "name": "drnkwati/bootpack",
+    "description": "Laravel package bootstraper",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+    {
+        "name": "Divine Nkwati",
+        "email": "drnkwati@gmail.com"
+    },
+    {
+        "name": "Èrik Campobadal",
+        "email": "soc@erik.cat"
+    }],
+    "require":
+    {
+        "php": ">=5.5.9",
+        "illuminate/support": ">=5.1"
+    },
+    "autoload":
+    {
+        "psr-4":
+        {
+            "Drnkwati\\Bootpack\\": "src/"
+        }
+    },
+    "extra":
+    {
+        "laravel":
+        {
+            "providers": [
+                "Drnkwati\\Bootpack\\BootpackServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
