@@ -57,10 +57,10 @@ class Package
             ]],
             'require' => [
                 'php' => ">={$this->php}",
-                'illuminate/support' => '>=5.0'
+                'illuminate/support' => '>=5.1'
             ],
             'require-dev' => [
-                'orchestra/testbench' => '>=3.0'
+                'orchestra/testbench' => '>=3.1'
             ],
             'autoload' => [
                 'psr-4' => [
