@@ -3,10 +3,10 @@
 return [
     'route' => [
         'api' => [
-            'prifix' => '{{ NAME }}'
+            'prefix' => '{{ NAME }}'
         ],
         'web' => [
-            'prifix' => '{{ NAME }}'
+            'prefix' => '{{ NAME }}'
         ]
     ]
 ];
