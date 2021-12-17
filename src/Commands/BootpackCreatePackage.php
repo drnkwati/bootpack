@@ -30,7 +30,7 @@ class BootpackCreatePackage extends Command
     {
         $name = explode('/', $this->argument('name'));
 
-        $p_name = $name[1];
+        $pName = $name[1];
 
         $name = $name[0] . '/' . $name[1];
 
@@ -79,48 +79,57 @@ class BootpackCreatePackage extends Command
                 $this->comment("Things are going fast artisan, let's add your package information into them");
 
                 Helpers::massStrReplaceFile('{{ NAMESPACE }}', $package->namespace, $path);
-                Helpers::massStrReplaceFile('{{ NAME }}', $p_name, $path);
-                Helpers::massStrReplaceFile('{{ UCNAME }}', ucfirst($p_name), $path);
+                Helpers::massStrReplaceFile('{{ NAME }}', $pName, $path);
+                Helpers::massStrReplaceFile('{{ UCNAME }}', ucfirst($pName), $path);
 
                 // rename files
                 $srcFile = $path . '/src/Config/config.php';
-                $desFile = $path . '/src/Config/' . $p_name . '.php';
+                $desFile = $path . '/src/Config/' . $pName . '.php';
                 if (!is_file($srcFile)) {
                     $srcFile = $path . '/config/config.php';
-                    $desFile = $path . '/config/' . $p_name . '.php';
+                    $desFile = $path . '/config/' . $pName . '.php';
                 }
                 !is_file($srcFile) ?: rename($srcFile, $desFile);
 
                 !is_file($srcFile = $path . '/src/ServiceProvider.php') ?: rename(
-                    $srcFile, $path . '/src/' . ucfirst($p_name) . 'ServiceProvider.php'
+                    $srcFile, $path . '/src/' . ucfirst($pName) . 'ServiceProvider.php'
                 );
                 !is_file($srcFile = $path . '/src/Controllers/Controller.php') ?: rename(
-                    $srcFile, $path . '/src/Controllers/' . ucfirst($p_name) . 'Controller.php'
+                    $srcFile, $path . '/src/Controllers/' . ucfirst($pName) . 'Controller.php'
                 );
                 !is_file($srcFile = $path . '/src/Commands/Command.php') ?: rename(
-                    $srcFile, $path . '/src/Commands/' . ucfirst($p_name) . 'Command.php'
+                    $srcFile, $path . '/src/Commands/' . ucfirst($pName) . 'Command.php'
                 );
                 !is_file($srcFile = $path . '/src/Middleware/Middleware.php') ?: rename(
-                    $srcFile, $path . '/src/Middleware/' . ucfirst($p_name) . 'Middleware.php'
+                    $srcFile, $path . '/src/Middleware/' . ucfirst($pName) . 'Middleware.php'
                 );
-                !is_file($srcFile = $path . '/src/Migrations/2017_08_11_171401_create_some_table.php') ?: rename(
-                    $srcFile, $path . '/src/Migrations/2017_08_11_171401_create_' . ucfirst($p_name) . '_table.php'
-                );
+
+                //
+                foreach ([
+                    $path . '/src/Migrations/2017_08_11_171401_create_some_table.php' =>
+                    $path . '/src/Migrations/2017_08_11_171401_create_' . $pName . '_table.php',
+
+                    $path . '/database/migrations/2021_11_22_000001_create_some_table.php' =>
+                    $path . '/database/migrations/2021_11_22_000001_create_' . $pName . '_table.php'
+                ] as $srcFile => $outFile) {
+                    !is_file($srcFile) ?: rename($srcFile, $outFile);
+                }
+                //
                 !is_file($srcFile = $path . '/src/Contracts/Contract.php') ?: rename(
-                    $srcFile, $path . '/src/Contracts/' . ucfirst($p_name) . 'Contract.php'
+                    $srcFile, $path . '/src/Contracts/' . ucfirst($pName) . 'Contract.php'
                 );
                 !is_file($srcFile = $path . '/src/Classes/Class.php') ?: rename(
-                    $srcFile, $path . '/src/Classes/' . ucfirst($p_name) . 'Class.php'
+                    $srcFile, $path . '/src/Classes/' . ucfirst($pName) . 'Class.php'
                 );
 
                 $this->info('Yey! The package structure is ready for action!');
                 $this->comment('Hey we are almost done with this! Let me add the class loader to the current composer project...');
 
-                $l_composer = json_decode(file_get_contents(base_path('composer.json')), true);
-                $l_composer['autoload']['psr-4'][$package->namespace . '\\'] = str_replace(base_path() . '/', '', $path) . '/src';
+                $lComposer = json_decode(file_get_contents(base_path('composer.json')), true);
+                $lComposer['autoload']['psr-4'][$package->namespace . '\\'] = str_replace(base_path() . '/', '', $path) . '/src';
                 file_put_contents(
                     base_path('composer.json'),
-                    json_encode($l_composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                    json_encode($lComposer, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
                 );
 
                 $this->info('Your main composer.json file has been updated.');
@@ -130,11 +139,11 @@ class BootpackCreatePackage extends Command
                         print shell_exec('cd ' . base_path() . ' && composer dump-autoload');
                     } else {
                         if ($this->confirm('Do you want me to try using the downloaded binary?', 'yes')) {
-                            $c_path = base_path('vendor/composer/composer/bin/composer');
-                            print shell_exec('cd ' . base_path() . ' && ' . $c_path . ' dump-autoload');
+                            $cPath = base_path('vendor/composer/composer/bin/composer');
+                            print shell_exec('cd ' . base_path() . ' && ' . $cPath . ' dump-autoload');
                         } else {
-                            $c_path = $this->ask('Please specify the full composer executable file path');
-                            print shell_exec('cd ' . base_path() . ' && ' . $c_path . ' dump-autoload');
+                            $cPath = $this->ask('Please specify the full composer executable file path');
+                            print shell_exec('cd ' . base_path() . ' && ' . $cPath . ' dump-autoload');
                         }
                     }
                     $this->table(['namespace', 'path'], [[
@@ -177,7 +186,7 @@ class BootpackCreatePackage extends Command
                     Helpers::strReplaceFile(
                         'App\\Providers\\RouteServiceProvider::class,',
                         "App\\Providers\\RouteServiceProvider::class,\n\t\t"
-                        . $package->namespace . "\\" . ucfirst($p_name) . 'ServiceProvider::class,',
+                        . $package->namespace . "\\" . ucfirst($pName) . 'ServiceProvider::class,',
                         base_path('config/app.php')
                     );
 
@@ -187,8 +196,8 @@ class BootpackCreatePackage extends Command
                         if ($this->confirm('Do you have git command in your path?', 'yes')) {
                             print shell_exec('cd ' . $path . ' && git init');
                         } else {
-                            $g_path = $this->ask('Please specify the full git executable file path');
-                            print shell_exec('cd ' . $path . ' && ' . $g_path . '  init');
+                            $gPath = $this->ask('Please specify the full git executable file path');
+                            print shell_exec('cd ' . $path . ' && ' . $gPath . '  init');
                         }
                     }
 
