@@ -40,6 +40,8 @@ class BootpackCreatePackage extends Command
 
         $path = $path . '/' . $name;
 
+        $this->logo('Laravel 5 package bootstraper');
+
         $this->comment('The package root will be: ' . $path);
         if ($this->confirm('The package creation is going to start, type yes to begin', 'yes')) {
             if (!is_dir($path)) {

@@ -39,10 +39,20 @@ php artisan vendor:publish
 
 Can't be more simple... rename test/package to the vendor/packagename notation you wish to create.
 
-Example: drnkwati/bootpack
+Example: test/package
 
 ```
 php artisan bootpack:create test/package
 ```
+If you desire a minimal setup, pass in the option --source=legacy or provide a custom template path.
+
+```
+php artisan bootpack:create test/package --source=legacy
+```
+```
+php artisan bootpack:create test/package --source=~/path/to/custom/package/template/directory
+```
 
 You then have a cool functional terminal to help you create the package. Enjoy!
+
+![First](public/img/Screen-Shot.png?raw=true "Bootpack Screen Shot")
