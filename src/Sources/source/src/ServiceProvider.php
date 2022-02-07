@@ -56,6 +56,8 @@ class {{ UCNAME }}ServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->make(\Illuminate\Database\Eloquent\Factory::class)->load(__DIR__ . '/../database/factories');
+
         $this->mergeConfigFrom(
             __DIR__ . '/../config/{{ NAME }}.php', '{{ NAME }}'
         );
